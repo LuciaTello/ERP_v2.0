@@ -1,0 +1,87 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.cineslave.controlador;
+
+import com.cineslave.modelo.Cabecera_Pedido;
+import com.cineslave.modelo.Cuerpo_Pedido;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author juanxxiii
+ */
+public class Gestor_Pedidos {
+
+    Conexion con = new Conexion();
+    Connection conexion;
+
+    public Gestor_Pedidos(Connection _con) throws Exception {
+        this.conexion = _con;
+    }
+
+    public void realizarPedido(Cabecera_Pedido _cabeceraP, Cuerpo_Pedido _cuerpoP) throws SQLException {
+        PreparedStatement ps;
+        //CABECERA
+        //primero la cabecera por la FK del Cuerpo_Pedido
+        String sql_cabecera = "INSERT INTO Cabecera_Pedido (fecha, importeTotalsiniva, importeTotalconiva, iva) VALUES (?,?,?,?)";
+        ps = conexion.prepareStatement(sql_cabecera);
+        ps.setString(1, _cabeceraP.getFecha());
+        ps.setInt(2, _cabeceraP.getImporteTotalsinIva());
+        ps.setFloat(3, _cabeceraP.getIVA());
+        ps.setInt(4, _cabeceraP.getImporteTotalConIva());
+        ps.executeUpdate();
+        
+        //CUERPO
+        String sql_cuerpo = "INSERT INTO Cuerpo_Pedido (codProducto, descripProducto, ctd, precio) VALUES (?,?,?,?)";
+        ps = conexion.prepareStatement(sql_cuerpo);
+        ps.setInt(1, _cuerpoP.getCodProducto());
+        ps.setString(2, _cuerpoP.getDescripProducto());
+        ps.setInt(3, _cuerpoP.getCtd());
+        ps.setInt(4, _cuerpoP.getPrecio());
+        ps.executeUpdate();
+        //los id deberian insertarse automaticamente
+    }
+
+    public void eliminarPedido(String _fecha) throws SQLException {
+        PreparedStatement ps;
+        int modificaciones = 0;
+        String sql = "DELETE FROM Cabecera_Pedido WHERE fecha = " + _fecha + "";
+        ps = conexion.prepareStatement(sql);
+        modificaciones = ps.executeUpdate();
+        System.out.println("Proveedores borrados: " + modificaciones);
+    }
+
+    public void modificarPedido(String _fecha, Cuerpo_Pedido _cuerpo_pedido) throws SQLException {
+        PreparedStatement ps;
+        int modificaciones = 0;
+        String sql = "UPDATE Cabecera_Pedido SET codProducto=?, descripProducto=?, ctd=?, precio=? WHERE fecha = " + _fecha + "";
+        ps = conexion.prepareStatement(sql);
+        ps.setInt(1, _cuerpo_pedido.getCodProducto());
+        ps.setString(2, _cuerpo_pedido.getDescripProducto());
+        ps.setInt(3, _cuerpo_pedido.getCtd());
+        ps.setInt(4, _cuerpo_pedido.getPrecio());
+        modificaciones = ps.executeUpdate();
+        System.out.println("Proveedores modificacdos: " + modificaciones);
+    }
+
+    public Cabecera_Pedido consultaPedido(String _fecha) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs = null;
+        Cabecera_Pedido caPedido = null;
+        Cuerpo_Pedido cuPedido = null;
+        String sql = "SELECT * FROM Cabecera_Pedido WHERE fecha = " + _fecha + "";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            //1 idProveedor//2 cif//3 nombre//4 telefono//5 poblacion//6 cp
+            //caPedido = new Cabecera_Pedido(rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+        }
+        return caPedido;
+    }
+}

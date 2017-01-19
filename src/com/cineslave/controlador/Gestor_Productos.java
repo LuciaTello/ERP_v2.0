@@ -30,14 +30,14 @@ public class Gestor_Productos {
     
     public void crearProducto(Producto _nuevoProducto) throws SQLException {
         PreparedStatement ps;
-        String sql = "INSERT INTO PELICULAS (nombre, duracion, edad) VALUES (?,?,?)";
+        String sql = "INSERT INTO producto (descripcion, precio) VALUES (?,?)";
         ps = conexion.prepareStatement(sql);
-        ps.setString(1, _nuevoProducto.getNombre());
-        ps.setInt(2, _nuevoProducto.getDuracion());
-        ps.setInt(3, _nuevoProducto.getEdad());
+        ps.setString(1, _nuevoProducto.getDescripcion());
+        ps.setInt(2, _nuevoProducto.getPrecio());
         ps.executeUpdate();
+        
     }
-
+/*
     public void borrarProducto(String _nombre) throws SQLException {
         PreparedStatement ps;
         int modificaciones = 0;
@@ -53,7 +53,7 @@ public class Gestor_Productos {
      * @param _cif cif del proveedor para acceder a dicho proveedor
      * @param _proveedor objeto para devolver valores
      * @throws SQLException
-     */
+     *//*
     public void modificarProducto(Producto _producto) throws SQLException {
         PreparedStatement ps;
         int modificaciones = 0;
@@ -82,5 +82,5 @@ public class Gestor_Productos {
         return _nuevoProveedor;
     }
     
-    
+    */
 }

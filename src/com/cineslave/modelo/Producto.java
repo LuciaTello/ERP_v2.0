@@ -12,12 +12,11 @@ package com.cineslave.modelo;
 public class Producto {
 
     private int idProducto;
-    private String descripción;
+    private String descripcion;
     private int precio;
 
-    public Producto(int idProducto, String descripción, int precio) {
-        this.idProducto = idProducto;
-        this.descripción = descripción;
+    public Producto(String descripción, int precio) {
+        this.descripcion = descripción;
         this.precio = precio;
     }
 
@@ -29,12 +28,12 @@ public class Producto {
         this.idProducto = idProducto;
     }
 
-    public String getDescripción() {
-        return descripción;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripción(String descripción) {
-        this.descripción = descripción;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public int getPrecio() {

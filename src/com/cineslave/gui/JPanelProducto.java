@@ -6,8 +6,14 @@
 package com.cineslave.gui;
 
 import com.cineslave.controlador.Gestor_Pedidos;
+import com.cineslave.controlador.Gestor_Pelicula;
 import com.cineslave.controlador.Gestor_Productos;
+import com.cineslave.modelo.Pelicula;
+import com.cineslave.modelo.Producto;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +24,7 @@ public class JPanelProducto extends javax.swing.JPanel {
     private JFPrincipal jfe;
     Connection con;
     
-    Gestor_Productos ge;
+    Gestor_Productos gProd;
     
     /**
      * Creates new form JPanelProducto
@@ -49,9 +55,9 @@ public class JPanelProducto extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jbModificarProducto = new javax.swing.JButton();
-        jtfNombreProducto1 = new javax.swing.JTextField();
+        jtfNombreProductoConsulta = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jtfPrecioProducto1 = new javax.swing.JTextField();
+        jtfPrecioProductoConsulta = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jbBorrarProducto = new javax.swing.JButton();
@@ -61,13 +67,18 @@ public class JPanelProducto extends javax.swing.JPanel {
         add(jtfNombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, 106, -1));
         add(jtfPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 106, -1));
 
-        jLabel2.setText("Nombre");
+        jLabel2.setText("Descripción");
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, -1));
 
         jLabel3.setText("Precio");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, -1, -1));
 
         jbAddProducto.setText("Crear");
+        jbAddProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAddProductoActionPerformed(evt);
+            }
+        });
         add(jbAddProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, -1, -1));
         add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 223, 557, 10));
 
@@ -75,7 +86,7 @@ public class JPanelProducto extends javax.swing.JPanel {
         jLabel1.setText("AÑADE UN NUEVO PRODUCTO");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, -1));
 
-        jLabel4.setText("Nombre");
+        jLabel4.setText("Descripción");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, -1, -1));
 
         jLabel5.setText("Precio");
@@ -83,12 +94,12 @@ public class JPanelProducto extends javax.swing.JPanel {
 
         jbModificarProducto.setText("Modificar");
         add(jbModificarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, -1, -1));
-        add(jtfNombreProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 106, -1));
+        add(jtfNombreProductoConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 106, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("CONSULTAS Y MODIFICACIONES");
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, -1, -1));
-        add(jtfPrecioProducto1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 106, -1));
+        add(jtfPrecioProductoConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 106, -1));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 106, -1));
@@ -100,8 +111,33 @@ public class JPanelProducto extends javax.swing.JPanel {
         add(jbBorrarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
 
         jbConsultarProducto.setText("Consultar");
+        jbConsultarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbConsultarProductoActionPerformed(evt);
+            }
+        });
         add(jbConsultarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbAddProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddProductoActionPerformed
+        Producto prod = new Producto(jtfNombreProducto.getText().toLowerCase(), 
+                Integer.parseInt(jtfPrecioProducto.getText()));
+        
+            gProd = new Gestor_Productos(con);
+        try {       
+            gProd.crearProducto(prod);
+            System.out.println("Se ha creado su producto");
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbAddProductoActionPerformed
+
+    private void jbConsultarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConsultarProductoActionPerformed
+        /*gProd = new Gestor_Producto(con);
+            Producto prod = gProd.consultarPelicula(jtfNombre.getText().toLowerCase());
+            jtfNombreProducto.setText(prod.getNombre());
+            jtfPrecioProducto.setText(String.valueOf(prod.getDuracion()));*/
+    }//GEN-LAST:event_jbConsultarProductoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -119,8 +155,8 @@ public class JPanelProducto extends javax.swing.JPanel {
     private javax.swing.JButton jbConsultarProducto;
     private javax.swing.JButton jbModificarProducto;
     private javax.swing.JTextField jtfNombreProducto;
-    private javax.swing.JTextField jtfNombreProducto1;
+    private javax.swing.JTextField jtfNombreProductoConsulta;
     private javax.swing.JTextField jtfPrecioProducto;
-    private javax.swing.JTextField jtfPrecioProducto1;
+    private javax.swing.JTextField jtfPrecioProductoConsulta;
     // End of variables declaration//GEN-END:variables
 }

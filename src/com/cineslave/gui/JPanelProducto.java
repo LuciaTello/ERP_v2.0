@@ -63,15 +63,9 @@ public class JPanelProducto extends javax.swing.JPanel {
         jbBorrarProducto = new javax.swing.JButton();
         jbConsultarProducto = new javax.swing.JButton();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(jtfNombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, 106, -1));
-        add(jtfPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 106, -1));
-
         jLabel2.setText("Descripción");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, -1, -1));
 
         jLabel3.setText("Precio");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, -1, -1));
 
         jbAddProducto.setText("Crear");
         jbAddProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -79,36 +73,24 @@ public class JPanelProducto extends javax.swing.JPanel {
                 jbAddProductoActionPerformed(evt);
             }
         });
-        add(jbAddProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, -1, -1));
-        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 223, 557, 10));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("AÑADE UN NUEVO PRODUCTO");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, -1));
 
         jLabel4.setText("Descripción");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, -1, -1));
 
         jLabel5.setText("Precio");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 370, -1, -1));
 
         jbModificarProducto.setText("Modificar");
-        add(jbModificarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, -1, -1));
-        add(jtfNombreProductoConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 340, 106, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("CONSULTAS Y MODIFICACIONES");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, -1, -1));
-        add(jtfPrecioProductoConsulta, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 370, 106, -1));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 106, -1));
 
         jLabel7.setText("Elige un Producto");
-        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, -1, -1));
 
         jbBorrarProducto.setText("Eliminar");
-        add(jbBorrarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
 
         jbConsultarProducto.setText("Consultar");
         jbConsultarProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -116,7 +98,93 @@ public class JPanelProducto extends javax.swing.JPanel {
                 jbConsultarProductoActionPerformed(evt);
             }
         });
-        add(jbConsultarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 410, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(180, 180, 180)
+                .addComponent(jLabel1))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(jLabel2)
+                .addGap(16, 16, 16)
+                .addComponent(jtfNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(jLabel3)
+                .addGap(41, 41, 41)
+                .addComponent(jtfPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(300, 300, 300)
+                .addComponent(jbAddProducto))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(180, 180, 180)
+                .addComponent(jLabel6))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(210, 210, 210)
+                .addComponent(jLabel7)
+                .addGap(37, 37, 37)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(260, 260, 260)
+                .addComponent(jLabel4)
+                .addGap(16, 16, 16)
+                .addComponent(jtfNombreProductoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(260, 260, 260)
+                .addComponent(jLabel5)
+                .addGap(41, 41, 41)
+                .addComponent(jtfPrecioProductoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(180, 180, 180)
+                .addComponent(jbConsultarProducto)
+                .addGap(31, 31, 31)
+                .addComponent(jbModificarProducto)
+                .addGap(25, 25, 25)
+                .addComponent(jbBorrarProducto))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel1)
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jtfNombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jtfPrecioProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(jbAddProducto)
+                .addGap(20, 20, 20)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel6)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jtfNombreProductoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jtfPrecioProductoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbConsultarProducto)
+                    .addComponent(jbModificarProducto)
+                    .addComponent(jbBorrarProducto)))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAddProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddProductoActionPerformed

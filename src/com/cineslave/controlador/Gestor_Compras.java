@@ -5,14 +5,14 @@
  */
 package com.cineslave.controlador;
 
-import com.cineslave.modelo.Butaca;
 import com.cineslave.modelo.Cliente;
+import com.cineslave.modelo.Compra;
 import com.cineslave.modelo.Entrada;
 import com.cineslave.modelo.Pelicula;
-import com.cineslave.modelo.Proveedor;
 import com.cineslave.modelo.Sesion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -27,15 +27,16 @@ public class Gestor_Compras {
     private Cliente cliente;
     private Pelicula pelicula;
     private Sesion sesion;
+    private Compra compr;
     private int idCompra;
 
     public Gestor_Compras() throws Exception {
         this.conexion = con.conectar();
     }
 
-    public void generarCompra(Cliente cli,Pelicula pel,Entrada entr,Sesion ses,int idCom) throws SQLException {
+    public void generarCompra(String nombrePelicula,int horaSesion ,String nombreCLi , int idCom) throws SQLException {
         PreparedStatement ps;
-        String sql = "INSERT INTO Res_Entr_Cli VALUES (?,?,?)";
+        String sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
         ps = conexion.prepareStatement(sql);
         ps.setInt(1, entr.getIdEntrada());
         ps.setInt(2, cli.getIdCliente());
@@ -45,9 +46,8 @@ public class Gestor_Compras {
         ps = conexion.prepareStatement(sql);
         ps.setInt(1,idCompra);
         ps.executeUpdate();
-        sql = "INSERT INTO Entrada VALUES (?,?,?,?)";
+        sql = "INSERT INTO Entrada (idButaca,numFila,numColumna) VALUES (?,?,?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, entr.getIdEntrada());
         ps.setInt(2, entr.getButaca().getIdButaca());
         ps.setInt(3, entr.getButaca().getNumFila());
         ps.setInt(4, entr.getButaca().getNumColumna());
@@ -58,5 +58,17 @@ public class Gestor_Compras {
         ps.setInt(2, pel.getIdPelicula());
         ps.setInt(3, ses.getIdSesion());
         ps.executeUpdate();
+    }
+    public Compra consultarCompra(String nombreCli) throws SQLException{
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "Select peliculas.nombre , sesion.hora , entrada.numColumna , entrada.numFila from peliculas , entrada ,sesion ,Res_Entr_Cli, Entra_Peli_Ses , cliente where cliente.nombre = '"+nombreCli+"' and cliente.idCliente= Res_Entr_Cli.idCliente and Res_Entr_Cli.idEntrada = Entra_Peli_Ses.idEntrada and Entra_Peli_Ses.idPelicula = peliculas.idPelicula and Entra_Peli_Ses.idSesion = Sesion.idSesion";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            //1 idProveedor//2 cif//3 nombre//4 telefono//5 poblacion//6 cp
+            compr = new Compra(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
+        }
+        return compr;
     }
 }

@@ -210,12 +210,15 @@ public class JPanelEmpleados extends javax.swing.JPanel {
         String apellidos = jtfApellidos.getText();
         int telefono = Integer.parseInt(jtfTelefono.getText());
         String fechaInicio = jtfFechaInicio.getText();
-        String cargo = jcbCargo.getName();
+        String cargo = (String)jcbCargo.getSelectedItem();
         Empleado nuevoEmpleado = new Empleado(dni, nombre, apellidos, telefono, fechaInicio, cargo);
         try {
             ge = new Gestor_Empleado(con);
-            ge.altaEmpleado(nuevoEmpleado);
-            JOptionPane.showMessageDialog(null, "Empleado creado");
+            if(ge.altaEmpleado(nuevoEmpleado)){
+                JOptionPane.showMessageDialog(null, "Empleado dado de alta");
+            }else{
+                JOptionPane.showMessageDialog(null, "DNI ya dado de alta");
+            };
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error SQL");
         } catch (Exception ex) {
@@ -240,11 +243,27 @@ public class JPanelEmpleados extends javax.swing.JPanel {
         jtfApellidos.setText(nuevoEmpleado.getApellidos());
         jtfTelefono.setText(String.valueOf(nuevoEmpleado.getTelefono()));
         jtfFechaInicio.setText(nuevoEmpleado.getFechaInicio());
-        jcbCargo.setSelectedItem(nuevoEmpleado.getCargo());
+        System.out.println(nuevoEmpleado.getCargo());
+        switch (nuevoEmpleado.getCargo()) {
+            case "Gerente":
+                jcbCargo.setSelectedItem("Gerente");
+                break;
+            case "Administrativo":
+                jcbCargo.setSelectedItem("Administrativo");
+                break;
+            case "Taquillero":
+                jcbCargo.setSelectedItem("Taquillero");
+                break;
+            case "Resto de personal":
+                jcbCargo.setSelectedItem("Resto de personal");
+                break;
+            default:
+                break;
+        }
     }//GEN-LAST:event_jbConsultaActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        int modificaciones;
+                int modificaciones;
         String dni = jtfDNI.getText();
         String nombre = jtfNombre.getText();
         String apellidos = jtfApellidos.getText();
@@ -277,9 +296,7 @@ public class JPanelEmpleados extends javax.swing.JPanel {
     private void jtfApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfApellidosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfApellidosActionPerformed
-
-    
-    
+   
     private void borrarCampos() {
         jtfDNI.setText("");
         jtfNombre.setText("");

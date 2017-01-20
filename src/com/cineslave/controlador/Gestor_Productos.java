@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +40,26 @@ public class Gestor_Productos {
         ps.executeUpdate();
         
     }
+    
+    /*public ArrayList consultarProductos(){
+        ResultSet rs;
+        jcbMatriculas.removeAllItems();        
+        try {
+
+            rs = db.consultar("SELECT matricula FROM coches");
+            while (rs.next()) {
+                jcbMatriculas.addItem(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JFMain53.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JFMain53.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 /*
+    
+    */
     public void borrarProducto(String _nombre) throws SQLException {
         PreparedStatement ps;
         int modificaciones = 0;

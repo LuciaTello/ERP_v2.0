@@ -183,7 +183,8 @@ public class JPanelProducto extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbConsultarProducto)
                     .addComponent(jbModificarProducto)
-                    .addComponent(jbBorrarProducto)))
+                    .addComponent(jbBorrarProducto))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

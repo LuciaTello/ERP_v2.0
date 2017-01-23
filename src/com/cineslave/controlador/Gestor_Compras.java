@@ -20,13 +20,9 @@ import java.sql.SQLException;
  * @author Erikthegod
  */
 public class Gestor_Compras {
-    
+
     private Conexion con = new Conexion();
     private Connection conexion;
-    private Entrada entrada;
-    private Cliente cliente;
-    private Pelicula pelicula;
-    private Sesion sesion;
     private Compra compr;
     private int idCompra;
 
@@ -34,35 +30,45 @@ public class Gestor_Compras {
         this.conexion = con.conectar();
     }
 
-    public void generarCompra(String nombrePelicula,int horaSesion ,String nombreCLi , int idCom) throws SQLException {
+    public void generarCompra(String nombrePelicula, String horaSesion, String nombreCLi, int numFila, int numColum) throws SQLException {
         PreparedStatement ps;
-        String sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
-        ps = conexion.prepareStatement(sql);
-        ps.setInt(1, entr.getIdEntrada());
-        ps.setInt(2, cli.getIdCliente());
-        ps.setInt(3, idCompra);
-        ps.executeUpdate();
-        sql="INSERT INTO Reserva VALUES (?)";
-        ps = conexion.prepareStatement(sql);
-        ps.setInt(1,idCompra);
-        ps.executeUpdate();
+        String sql;
         sql = "INSERT INTO Entrada (idButaca,numFila,numColumna) VALUES (?,?,?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(2, entr.getButaca().getIdButaca());
-        ps.setInt(3, entr.getButaca().getNumFila());
-        ps.setInt(4, entr.getButaca().getNumColumna());
+        //ps.setInt(2, entr.getButaca().getIdButaca());
+        ps.setInt(3, numFila);
+        ps.setInt(4, numColum);
         ps.executeUpdate();
+        sql = "INSERT INTO Reserva VALUES (?)";
+        ps = conexion.prepareStatement(sql);
+        ps.setInt(1, (recuperarIdCompra() + 1));
+        ps.executeUpdate();
+        if (recuperarIdCliente(nombreCLi) == -1) {
+            sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
+            ps = conexion.prepareStatement(sql);
+            ps.setInt(1, recuperarIdEntrada());
+            ps.setInt(3, (recuperarIdCompra()));
+            ps.executeUpdate();
+        } else {
+            sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
+            ps = conexion.prepareStatement(sql);
+            ps.setInt(1, recuperarIdEntrada());
+            ps.setInt(2, recuperarIdCliente(nombreCLi));
+            ps.setInt(3, (recuperarIdCompra()));
+            ps.executeUpdate();
+        }
         sql = "INSERT INTO Entra_Peli_Ses VALUES (?,?,?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, entr.getIdEntrada());
-        ps.setInt(2, pel.getIdPelicula());
-        ps.setInt(3, ses.getIdSesion());
+        ps.setInt(1, recuperarIdEntrada());
+        ps.setInt(2, recuperarIdPeli(nombrePelicula));
+        ps.setInt(3, recuperarIdSesion(horaSesion));
         ps.executeUpdate();
     }
-    public Compra consultarCompra(String nombreCli) throws SQLException{
+
+    public Compra consultarCompra(String nombreCli) throws SQLException {
         PreparedStatement ps;
         ResultSet rs = null;
-        String sql = "Select peliculas.nombre , sesion.hora , entrada.numColumna , entrada.numFila from peliculas , entrada ,sesion ,Res_Entr_Cli, Entra_Peli_Ses , cliente where cliente.nombre = '"+nombreCli+"' and cliente.idCliente= Res_Entr_Cli.idCliente and Res_Entr_Cli.idEntrada = Entra_Peli_Ses.idEntrada and Entra_Peli_Ses.idPelicula = peliculas.idPelicula and Entra_Peli_Ses.idSesion = Sesion.idSesion";
+        String sql = "Select peliculas.nombre , sesion.hora , entrada.numColumna , entrada.numFila from peliculas , entrada ,sesion ,Res_Entr_Cli, Entra_Peli_Ses , cliente where cliente.nombre = '" + nombreCli + "' and cliente.idCliente= Res_Entr_Cli.idCliente and Res_Entr_Cli.idEntrada = Entra_Peli_Ses.idEntrada and Entra_Peli_Ses.idPelicula = peliculas.idPelicula and Entra_Peli_Ses.idSesion = Sesion.idSesion";
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
@@ -71,4 +77,77 @@ public class Gestor_Compras {
         }
         return compr;
     }
+
+    public int recuperarIdPeli(String _nombre) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs = null;
+        int idPeli = 0;
+        String sql = "SELECT idPelicula FROM PELICULAS WHERE NOMBRE = ?";
+        ps = conexion.prepareStatement(sql);
+        ps.setString(1, _nombre);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idPeli = rs.getInt(1);
+        }
+        return idPeli;
+    }
+
+    public int recuperarIdSesion(String horaSesion) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs = null;
+        int idSesion = 0;
+        String sql = "SELECT idSesion FROM PELICULAS WHERE HORA = ?";
+        ps = conexion.prepareStatement(sql);
+        ps.setString(1, horaSesion);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idSesion = rs.getInt(1);
+        }
+        return idSesion;
+    }
+
+    public int recuperarIdCompra() throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs = null;
+        int idCompra = 0;
+        String sql = "SELECT max(idReserva) FROM reservas";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idCompra = rs.getInt(1);
+        }
+        return idCompra;
+    }
+
+    public int recuperarIdEntrada() throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs = null;
+        int idEntrada = 0;
+        String sql = "SELECT max(idEntrada) FROM entrada";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idEntrada = rs.getInt(1);
+        }
+        return idEntrada;
+    }
+
+    public int recuperarIdCliente(String nombreCli) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet rs = null;
+        int idCliente = 0;
+        if (nombreCli.equals("")) {
+            idCliente = -1;
+        }
+        String sql = "SELECT idCliente FROM Cliente WHERE nombre = ?";
+        ps = conexion.prepareStatement(sql);
+        ps.setString(1, nombreCli);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idCliente = rs.getInt(1);
+        }
+        return idCliente;
+    }
+
 }

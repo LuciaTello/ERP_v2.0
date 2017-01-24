@@ -41,22 +41,18 @@ public class Gestor_Productos {
         
     }
     
-    /*public ArrayList consultarProductos(){
-        ResultSet rs;
-        jcbMatriculas.removeAllItems();        
-        try {
-
-            rs = db.consultar("SELECT matricula FROM coches");
-            while (rs.next()) {
-                jcbMatriculas.addItem(rs.getString(1));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JFMain53.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JFMain53.class.getName()).log(Level.SEVERE, null, ex);
+    public ArrayList consultarProductos() throws SQLException{
+        ArrayList alproductos = new ArrayList();
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "SELECT descripcion FROM producto";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            alproductos.add(rs.getString("descripcion"));
         }
+        return alproductos;
     }
-    
 /*
     
     */

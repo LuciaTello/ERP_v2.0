@@ -12,6 +12,7 @@ import com.cineslave.modelo.Pelicula;
 import com.cineslave.modelo.Producto;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,20 +21,33 @@ import java.util.logging.Logger;
  * @author juanxxiii
  */
 public class JPanelProducto extends javax.swing.JPanel {
-    
+
     private JFPrincipal jfe;
     Connection con;
-    
+
     Gestor_Productos gProd;
-    
+    ArrayList alProductos;
+
     /**
      * Creates new form JPanelProducto
      */
-
     public JPanelProducto(JFPrincipal jfe, Connection con) {
         initComponents();
         this.jfe = jfe;
         this.con = con;
+        jcbProductos.removeAllItems();
+        gProd = new Gestor_Productos(con);
+        alProductos = new ArrayList();
+
+        try {
+            alProductos = gProd.consultarProductos();
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelProducto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (int i = 0; i < alProductos.size(); i++) {
+            jcbProductos.addItem((String) alProductos.get(i));
+        }
     }
 
     /**
@@ -58,7 +72,7 @@ public class JPanelProducto extends javax.swing.JPanel {
         jtfNombreProductoConsulta = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jtfPrecioProductoConsulta = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jcbProductos = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jbBorrarProducto = new javax.swing.JButton();
         jbConsultarProducto = new javax.swing.JButton();
@@ -86,7 +100,7 @@ public class JPanelProducto extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("CONSULTAS Y MODIFICACIONES");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel7.setText("Elige un Producto");
 
@@ -129,7 +143,7 @@ public class JPanelProducto extends javax.swing.JPanel {
                 .addGap(210, 210, 210)
                 .addComponent(jLabel7)
                 .addGap(37, 37, 37)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jcbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(260, 260, 260)
                 .addComponent(jLabel4)
@@ -170,7 +184,7 @@ public class JPanelProducto extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -189,11 +203,10 @@ public class JPanelProducto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbAddProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddProductoActionPerformed
-        Producto prod = new Producto(jtfNombreProducto.getText().toLowerCase(), 
+        Producto prod = new Producto(jtfNombreProducto.getText().toLowerCase(),
                 Integer.parseInt(jtfPrecioProducto.getText()));
-        
-            gProd = new Gestor_Productos(con);
-        try {       
+
+        try {
             gProd.crearProducto(prod);
             System.out.println("Se ha creado su producto");
         } catch (SQLException ex) {
@@ -210,7 +223,6 @@ public class JPanelProducto extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -223,6 +235,7 @@ public class JPanelProducto extends javax.swing.JPanel {
     private javax.swing.JButton jbBorrarProducto;
     private javax.swing.JButton jbConsultarProducto;
     private javax.swing.JButton jbModificarProducto;
+    private javax.swing.JComboBox<String> jcbProductos;
     private javax.swing.JTextField jtfNombreProducto;
     private javax.swing.JTextField jtfNombreProductoConsulta;
     private javax.swing.JTextField jtfPrecioProducto;

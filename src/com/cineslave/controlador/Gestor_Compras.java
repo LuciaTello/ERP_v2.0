@@ -19,7 +19,7 @@ public class Gestor_Compras {
 
     private Connection conexion;
     private Compra compr;
-    
+
     public Gestor_Compras(Connection _con) throws Exception {
         this.conexion = _con;
     }
@@ -27,40 +27,46 @@ public class Gestor_Compras {
     public void generarCompra(String nombrePelicula, String horaSesion, String nombreCLi, int numFila, int numColum) throws SQLException {
         PreparedStatement ps;
         String sql;
-        
+
         sql = "INSERT INTO Entrada (idEntrada) VALUES (?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, (recuperarIdEntrada()+1));
+        int idEntrada = (recuperarIdEntrada() + 1);
+        ps.setInt(1, idEntrada);
         ps.executeUpdate();
         sql = "INSERT INTO Reserva VALUES (?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, (recuperarIdCompra() + 1));
+        int idCompra = (recuperarIdCompra() + 1);
+        ps.setInt(1, idCompra);
         ps.executeUpdate();
         if (recuperarIdCliente(nombreCLi) == -1) {
             sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, recuperarIdEntrada());
-            ps.setInt(3, (recuperarIdCompra()));
+            ps.setInt(3, idCompra);
             ps.executeUpdate();
         } else {
             sql = "INSERT INTO  Res_Entr_Cli VALUES (?,?,?)";
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, recuperarIdEntrada());
             ps.setInt(2, recuperarIdCliente(nombreCLi));
-            ps.setInt(3, (recuperarIdCompra()));
+            ps.setInt(3, idCompra);
             ps.executeUpdate();
         }
         sql = "INSERT INTO Entra_Peli_Ses VALUES (?,?,?)";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, recuperarIdEntrada());
-        ps.setInt(2, recuperarIdPeli(nombrePelicula));
-        ps.setInt(3, recuperarIdSesion(horaSesion));
+        int idPeli = recuperarIdPeli(nombrePelicula);
+        int idSesion = recuperarIdSesion(horaSesion);
+        ps.setInt(1, idEntrada);
+        ps.setInt(2, idPeli);
+        ps.setInt(3, idSesion);
         ps.executeUpdate();
         sql = "Update But_Ses_Sal set ocupado = 1 where idButaca=? and idSesion=? and idSala =?";
         ps = conexion.prepareStatement(sql);
-        ps.setInt(1, (recuperarIdButaca(numFila, numColum)));
-        ps.setInt(2, (recuperarIdSesion(horaSesion)+1));
-        ps.setInt(3, (recuperarIdSala(recuperarIdPeli(nombrePelicula),recuperarIdSesion(horaSesion))+1));
+        int idButaca= recuperarIdButaca(numFila, numColum);
+        int idSala=recuperarIdSala(recuperarIdPeli(nombrePelicula), recuperarIdSesion(horaSesion));
+        ps.setInt(1,idButaca);
+        ps.setInt(2, idSesion);
+        ps.setInt(3, idSala);
         ps.executeUpdate();
     }
 
@@ -147,9 +153,9 @@ public class Gestor_Compras {
         }
         return idCliente;
     }
-    
-    public int recuperarIdSala(int idPelicula, int idSesion) throws SQLException{
-        int idSala=0;
+
+    public int recuperarIdSala(int idPelicula, int idSesion) throws SQLException {
+        int idSala = 0;
         PreparedStatement ps;
         ResultSet rs = null;
         String sql = "SELECT idSala FROM Sal_Peli_Ses WHERE idPelicula = ? and idSesion = ?";
@@ -162,9 +168,9 @@ public class Gestor_Compras {
         }
         return idSala;
     }
-    
-    public int recuperarIdButaca(int numFila , int numColumna) throws SQLException{
-        int idButaca=0;
+
+    public int recuperarIdButaca(int numFila, int numColumna) throws SQLException {
+        int idButaca = 0;
         PreparedStatement ps;
         ResultSet rs = null;
         String sql = "SELECT idButaca FROM Butaca WHERE numFila = ? and numColumna = ?";

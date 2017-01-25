@@ -5,11 +5,7 @@
  */
 package com.cineslave.controlador;
 
-import com.cineslave.modelo.Cliente;
 import com.cineslave.modelo.Compra;
-import com.cineslave.modelo.Entrada;
-import com.cineslave.modelo.Pelicula;
-import com.cineslave.modelo.Sesion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,23 +17,20 @@ import java.sql.SQLException;
  */
 public class Gestor_Compras {
 
-    private Conexion con = new Conexion();
     private Connection conexion;
     private Compra compr;
-    private int idCompra;
-
-    public Gestor_Compras() throws Exception {
-        this.conexion = con.conectar();
+    
+    public Gestor_Compras(Connection _con) throws Exception {
+        this.conexion = _con;
     }
 
     public void generarCompra(String nombrePelicula, String horaSesion, String nombreCLi, int numFila, int numColum) throws SQLException {
         PreparedStatement ps;
         String sql;
-        sql = "INSERT INTO Entrada (idButaca,numFila,numColumna) VALUES (?,?,?)";
+        
+        sql = "INSERT INTO Entrada (idEntrada) VALUES (?)";
         ps = conexion.prepareStatement(sql);
-        //ps.setInt(2, entr.getButaca().getIdButaca());
-        ps.setInt(3, numFila);
-        ps.setInt(4, numColum);
+        ps.setInt(1, (recuperarIdEntrada()+1));
         ps.executeUpdate();
         sql = "INSERT INTO Reserva VALUES (?)";
         ps = conexion.prepareStatement(sql);
@@ -62,6 +55,12 @@ public class Gestor_Compras {
         ps.setInt(1, recuperarIdEntrada());
         ps.setInt(2, recuperarIdPeli(nombrePelicula));
         ps.setInt(3, recuperarIdSesion(horaSesion));
+        ps.executeUpdate();
+        sql = "Update But_Ses_Sal set ocupado = 1 where idButaca=? and idSesion=? and idSala =?";
+        ps = conexion.prepareStatement(sql);
+        ps.setInt(1, (recuperarIdButaca(numFila, numColum)));
+        ps.setInt(2, (recuperarIdSesion(horaSesion)+1));
+        ps.setInt(3, (recuperarIdSala(recuperarIdPeli(nombrePelicula),recuperarIdSesion(horaSesion))+1));
         ps.executeUpdate();
     }
 
@@ -96,7 +95,7 @@ public class Gestor_Compras {
         PreparedStatement ps;
         ResultSet rs = null;
         int idSesion = 0;
-        String sql = "SELECT idSesion FROM PELICULAS WHERE HORA = ?";
+        String sql = "SELECT idSesion FROM sesion WHERE HORA = ?";
         ps = conexion.prepareStatement(sql);
         ps.setString(1, horaSesion);
         rs = ps.executeQuery();
@@ -110,7 +109,7 @@ public class Gestor_Compras {
         PreparedStatement ps;
         ResultSet rs = null;
         int idCompra = 0;
-        String sql = "SELECT max(idReserva) FROM reservas";
+        String sql = "SELECT max(idReserva) FROM reserva";
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
@@ -133,7 +132,6 @@ public class Gestor_Compras {
     }
 
     public int recuperarIdCliente(String nombreCli) throws SQLException {
-
         PreparedStatement ps;
         ResultSet rs = null;
         int idCliente = 0;
@@ -148,6 +146,36 @@ public class Gestor_Compras {
             idCliente = rs.getInt(1);
         }
         return idCliente;
+    }
+    
+    public int recuperarIdSala(int idPelicula, int idSesion) throws SQLException{
+        int idSala=0;
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "SELECT idSala FROM Sal_Peli_Ses WHERE idPelicula = ? and idSesion = ?";
+        ps = conexion.prepareStatement(sql);
+        ps.setInt(1, idPelicula);
+        ps.setInt(2, idSesion);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idSala = rs.getInt(1);
+        }
+        return idSala;
+    }
+    
+    public int recuperarIdButaca(int numFila , int numColumna) throws SQLException{
+        int idButaca=0;
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "SELECT idButaca FROM Butaca WHERE numFila = ? and numColumna = ?";
+        ps = conexion.prepareStatement(sql);
+        ps.setInt(1, numFila);
+        ps.setInt(2, numColumna);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            idButaca = rs.getInt(1);
+        }
+        return idButaca;
     }
 
 }

@@ -269,7 +269,7 @@ public class JPanelEmpleados extends javax.swing.JPanel {
         String apellidos = jtfApellidos.getText();
         int telefono = Integer.parseInt(jtfTelefono.getText());
         String fechaInicio = jtfFechaInicio.getText();
-        String cargo = jcbCargo.getName();
+        String cargo = (String)jcbCargo.getSelectedItem();
         Empleado nuevoEmpleado = new Empleado(dni, nombre, apellidos, telefono, fechaInicio, cargo);
         try {
             ge = new Gestor_Empleado(con);

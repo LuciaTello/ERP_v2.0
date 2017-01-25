@@ -78,7 +78,7 @@ public class Gestor_Empleado {
     public void borrarEmpleado(String _dni) throws SQLException {
         PreparedStatement ps;
         int modificaciones = 0;
-        String sql = "DELETE FROM EMPLEADOS WHERE DNI = ?";
+        String sql = "DELETE FROM EMPLEADO WHERE DNI = ?";
         ps = conexion.prepareStatement(sql);
         ps.setString(1, _dni);
         modificaciones = ps.executeUpdate();
@@ -88,7 +88,7 @@ public class Gestor_Empleado {
     public int modificarEmpleado(Empleado _empleado) throws SQLException {
         PreparedStatement ps;
         int modificaciones = 0;
-        String sql = "UPDATE CLIENTE SET DNI=?"
+        String sql = "UPDATE EMPLEADO SET DNI=?"
                 + " ,NOMBRE=?"
                 + " ,APELLIDO=?"
                 + " ,TELEFONO=?"

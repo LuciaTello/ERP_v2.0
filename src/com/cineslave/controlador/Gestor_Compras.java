@@ -73,7 +73,7 @@ public class Gestor_Compras {
     public Compra consultarCompra(String nombreCli) throws SQLException {
         PreparedStatement ps;
         ResultSet rs = null;
-        String sql = "Select peliculas.nombre , sesion.hora , entrada.numColumna , entrada.numFila from peliculas , entrada ,sesion ,Res_Entr_Cli, Entra_Peli_Ses , cliente where cliente.nombre = '" + nombreCli + "' and cliente.idCliente= Res_Entr_Cli.idCliente and Res_Entr_Cli.idEntrada = Entra_Peli_Ses.idEntrada and Entra_Peli_Ses.idPelicula = peliculas.idPelicula and Entra_Peli_Ses.idSesion = Sesion.idSesion";
+        String sql = "Select peliculas.nombre , sesion.hora , butaca.numFila,butaca.numColumna from peliculas , entrada ,sesion ,Res_Entr_Cli, Entra_Peli_Ses , But_Ses_Sal,Sal_Peli_Ses,butaca cliente where cliente.nombre = '" + nombreCli + "' and cliente.idCliente= Res_Entr_Cli.idCliente and Res_Entr_Cli.idEntrada = Entra_Peli_Ses.idEntrada and Entra_Peli_Ses.idPelicula = peliculas.idPelicula and Entra_Peli_Ses.idSesion = Sesion.idSesion and Sal_Peli_Ses.idSesion = Sesion.idSesion and Sal_Peli_Ses.idPelicula = peliculas.idPelicula and Sal_Peli_Ses.idSala = But_Ses_Sal.idSala and But_Ses_Sal.idSesion = Sesion.idSesion and But_Ses_Sal.idButaca= Butaca.idButaca";
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {

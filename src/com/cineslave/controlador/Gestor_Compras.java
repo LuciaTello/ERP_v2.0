@@ -199,7 +199,7 @@ public class Gestor_Compras {
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
-            nombrePeliculas.add(rs.getString(0));
+            nombrePeliculas.add(rs.getString(1));
         }
         return nombrePeliculas;
     }
@@ -214,7 +214,7 @@ public class Gestor_Compras {
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
-            sesionesDisponibles.add(rs.getString(0));
+            sesionesDisponibles.add(rs.getString(1));
         }
         return sesionesDisponibles;
     }
@@ -225,11 +225,11 @@ public class Gestor_Compras {
         ResultSet rs = null;     
         String sql = "SELECT numFila FROM butaca where idButaca = "
                 + "(select idButaca from But_Ses_Sal where idSesion = "+recuperarIdSesion(hora)
-                + "and ocupado = 0";
+                + " and ocupado = 0)";
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
-            filasDisponibles.add(rs.getInt(0));
+            filasDisponibles.add(rs.getInt(1));
         }
         return filasDisponibles;
     }
@@ -240,11 +240,11 @@ public class Gestor_Compras {
         ResultSet rs = null;     
         String sql = "SELECT numColumna FROM butaca where idButaca = "
                 + "(select idButaca from But_Ses_Sal where idSesion = "+recuperarIdSesion(hora)
-                + "and ocupado = 0) and numFila ="+fila;
+                + " and ocupado = 0) and numFila ="+fila;
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
-            columnasDisponibles.add(rs.getInt(0));
+            columnasDisponibles.add(rs.getInt(1));
         }
         return columnasDisponibles;
     }

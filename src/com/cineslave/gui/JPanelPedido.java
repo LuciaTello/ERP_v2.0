@@ -5,6 +5,8 @@
  */
 package com.cineslave.gui;
 
+import java.sql.Connection;
+
 /**
  *
  * @author juanxxiii
@@ -16,6 +18,9 @@ public class JPanelPedido extends javax.swing.JPanel {
      */
     public JPanelPedido() {
         initComponents();
+    }
+
+    JPanelPedido(JFPrincipal aThis, Connection conTotal) {
     }
 
     /**

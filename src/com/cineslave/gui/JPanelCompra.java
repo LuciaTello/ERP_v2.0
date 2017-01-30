@@ -8,6 +8,7 @@ package com.cineslave.gui;
 import com.cineslave.controlador.Gestor_Compras;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,6 +22,7 @@ public class JPanelCompra extends javax.swing.JPanel {
     private JFPrincipal jfe;
     private Gestor_Compras gest;
     private Connection con;
+    private ArrayList<String>nombrePeliculas;
 
     JPanelCompra(JFPrincipal aThis, Connection conTotal) {
         try {
@@ -28,6 +30,10 @@ public class JPanelCompra extends javax.swing.JPanel {
             this.jfe = aThis;
             this.con = conTotal;
             gest = new Gestor_Compras(con);
+            nombrePeliculas= gest.recuperarPeliculas();
+            for (int i = 0; i < nombrePeliculas.size(); i++) {
+                jcbPeliculas.addItem(nombrePeliculas.get(i));
+            }
         } catch (Exception ex) {
             Logger.getLogger(JPanelCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,7 +48,6 @@ public class JPanelCompra extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jtfPeli = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jtfCliente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -53,6 +58,7 @@ public class JPanelCompra extends javax.swing.JPanel {
         jtfNumColumna = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jbCompra = new javax.swing.JButton();
+        jcbPeliculas = new javax.swing.JComboBox<>();
 
         jLabel1.setText("Pelicula");
 
@@ -97,8 +103,8 @@ public class JPanelCompra extends javax.swing.JPanel {
                             .addComponent(jtfNumColumna, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jtfPeli, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                        .addComponent(jcbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
                         .addComponent(jbCompra)
                         .addGap(59, 59, 59))))
         );
@@ -107,13 +113,13 @@ public class JPanelCompra extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtfPeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addComponent(jbCompra)))
+                        .addComponent(jbCompra))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jcbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -136,12 +142,12 @@ public class JPanelCompra extends javax.swing.JPanel {
 
     private void jbCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompraActionPerformed
         try {
-            String nombrePeli = jtfPeli.getText();
+            String nombrePeli = jcbPeliculas.getSelectedItem().toString();
             String horaSesion = jtfSesion.getText();
             String nombreCli = jtfCliente.getText();
             int numFila = Integer.parseInt(jtfNumFila.getText());
             int numColumna = Integer.parseInt(jtfNumColumna.getText());
-            gest.generarCompra(nombrePeli,horaSesion, nombreCli, numFila, numColumna);
+            gest.generarCompra(nombrePeli, horaSesion, nombreCli, numFila, numColumna);
             JOptionPane.showMessageDialog(null, "Compra generada");
         } catch (SQLException ex) {
             Logger.getLogger(JPanelCompra.class.getName()).log(Level.SEVERE, null, ex);
@@ -156,10 +162,10 @@ public class JPanelCompra extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JButton jbCompra;
+    private javax.swing.JComboBox<String> jcbPeliculas;
     private javax.swing.JTextField jtfCliente;
     private javax.swing.JTextField jtfNumColumna;
     private javax.swing.JTextField jtfNumFila;
-    private javax.swing.JTextField jtfPeli;
     private javax.swing.JTextField jtfSesion;
     // End of variables declaration//GEN-END:variables
 }

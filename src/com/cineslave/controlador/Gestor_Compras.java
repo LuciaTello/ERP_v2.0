@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,6 +20,13 @@ public class Gestor_Compras {
 
     private Connection conexion;
     private Compra compr;
+    private ArrayList nombrePeliculas;    
+    private ArrayList sesionesDisponibles;
+    private ArrayList filasDisponibles;
+    private ArrayList columnasDisponibles;
+
+
+    
 
     public Gestor_Compras(Connection _con) throws Exception {
         this.conexion = _con;
@@ -77,7 +85,6 @@ public class Gestor_Compras {
         ps = conexion.prepareStatement(sql);
         rs = ps.executeQuery();
         while (rs.next() == true) {
-            //1 idProveedor//2 cif//3 nombre//4 telefono//5 poblacion//6 cp
             compr = new Compra(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
         }
         return compr;
@@ -182,6 +189,64 @@ public class Gestor_Compras {
             idButaca = rs.getInt(1);
         }
         return idButaca;
+    }
+    
+    public ArrayList <String> recuperarPeliculas() throws SQLException{
+        nombrePeliculas = new ArrayList();
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "SELECT nombre FROM Peliculas";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            nombrePeliculas.add(rs.getString(0));
+        }
+        return nombrePeliculas;
+    }
+    
+    public ArrayList <String> recuperarSesiones(String nombrePeli) throws SQLException{
+        sesionesDisponibles = new ArrayList();
+        PreparedStatement ps;
+        ResultSet rs = null;
+        String sql = "SELECT hora FROM sesion where idSesion = "
+                + "(select idSesion from Sal_Peli_Ses where idPelicula = "
+                + "(select idPelicula from Peliculas where nombre = '"+nombrePeli+"'))";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            sesionesDisponibles.add(rs.getString(0));
+        }
+        return sesionesDisponibles;
+    }
+    
+    public ArrayList recuperarFilas(String nombrePeli , String hora) throws SQLException{
+        filasDisponibles = new ArrayList();
+        PreparedStatement ps;
+        ResultSet rs = null;     
+        String sql = "SELECT numFila FROM butaca where idButaca = "
+                + "(select idButaca from But_Ses_Sal where idSesion = "+recuperarIdSesion(hora)
+                + "and ocupado = 0";
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            filasDisponibles.add(rs.getInt(0));
+        }
+        return filasDisponibles;
+    }
+    
+    public ArrayList recuperarColumnas(int fila,String hora) throws SQLException{
+        columnasDisponibles = new ArrayList();
+        PreparedStatement ps;
+        ResultSet rs = null;     
+        String sql = "SELECT numColumna FROM butaca where idButaca = "
+                + "(select idButaca from But_Ses_Sal where idSesion = "+recuperarIdSesion(hora)
+                + "and ocupado = 0) and numFila ="+fila;
+        ps = conexion.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next() == true) {
+            columnasDisponibles.add(rs.getInt(0));
+        }
+        return columnasDisponibles;
     }
 
 }

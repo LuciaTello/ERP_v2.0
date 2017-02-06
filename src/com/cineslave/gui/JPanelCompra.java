@@ -66,6 +66,7 @@ public class JPanelCompra extends javax.swing.JPanel {
         jcbSesion = new javax.swing.JComboBox<>();
         jcbFila = new javax.swing.JComboBox<>();
         jcbColumna = new javax.swing.JComboBox<>();
+        jbMostrar = new javax.swing.JButton();
 
         jLabel1.setText("Pelicula");
 
@@ -96,11 +97,13 @@ public class JPanelCompra extends javax.swing.JPanel {
             }
         });
 
-        jcbColumna.addActionListener(new java.awt.event.ActionListener() {
+        jcbFila.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbColumnaActionPerformed(evt);
+                jcbFilaActionPerformed(evt);
             }
         });
+
+        jbMostrar.setText("Mostrar Compra");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -126,7 +129,9 @@ public class JPanelCompra extends javax.swing.JPanel {
                     .addComponent(jcbFila, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jcbColumna, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                .addComponent(jbCompra)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbMostrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(59, 59, 59))
         );
         layout.setVerticalGroup(
@@ -141,11 +146,16 @@ public class JPanelCompra extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(jcbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jcbSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jcbSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jbMostrar)))
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jtfCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -183,11 +193,11 @@ public class JPanelCompra extends javax.swing.JPanel {
             sesionesDisponibles = gest.recuperarSesiones(nombrePeli);
             for (int i = 0; i < sesionesDisponibles.size(); i++) {
                 jcbSesion.addItem(sesionesDisponibles.get(i));
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(JPanelCompra.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jcbPeliculasActionPerformed
+            Logger.getLogger(JPanelCompra.class
+                    .getName()).log(Level.SEVERE, null, ex);}    }//GEN-LAST:event_jcbPeliculasActionPerformed
 
     private void jcbSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSesionActionPerformed
         try {
@@ -197,25 +207,27 @@ public class JPanelCompra extends javax.swing.JPanel {
             filasDisponibles = gest.recuperarFilas(nombrePeli, horaSesion);
             for (int i = 0; i < filasDisponibles.size(); i++) {
                 jcbFila.addItem(filasDisponibles.get(i).toString());
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(JPanelCompra.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jcbSesionActionPerformed
+            Logger.getLogger(JPanelCompra.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }    }//GEN-LAST:event_jcbSesionActionPerformed
 
-    private void jcbColumnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbColumnaActionPerformed
+    private void jcbFilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbFilaActionPerformed
         try {
-            columnasDisponibles=new ArrayList();
+            columnasDisponibles = new ArrayList();
             jcbColumna.removeAll();
-            numFila = Integer.parseInt(jcbSesion.getSelectedItem().toString());
+            numFila = Integer.parseInt(jcbFila.getSelectedItem().toString());
             columnasDisponibles = gest.recuperarColumnas(numFila, horaSesion);
             for (int i = 0; i < columnasDisponibles.size(); i++) {
                 jcbColumna.addItem(columnasDisponibles.get(i).toString());
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(JPanelCompra.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jcbColumnaActionPerformed
+            Logger.getLogger(JPanelCompra.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }    }//GEN-LAST:event_jcbFilaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -225,6 +237,7 @@ public class JPanelCompra extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JButton jbCompra;
+    private javax.swing.JButton jbMostrar;
     private javax.swing.JComboBox<String> jcbColumna;
     private javax.swing.JComboBox<String> jcbFila;
     private javax.swing.JComboBox<String> jcbPeliculas;
